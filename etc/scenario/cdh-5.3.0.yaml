@@ -1,52 +1,46 @@
 clusters:
   - plugin_name: cdh
-    plugin_version: 5.0
+    plugin_version: "5"
     image: cdh5
     node_group_templates:
       - name: worker-dn
         flavor_id: '3'
         node_processes:
-          - HDFS_DATANODE
+          - DATANODE
         volumes_per_node: 2
         volumes_size: 2
         auto_security_group: true
       - name: worker-nm
         flavor_id: '3'
         node_processes:
-          - YARN_NODEMANAGER
+          - NODEMANAGER
         auto_security_group: true
       - name: worker-nm-dn
         flavor_id: '3'
         node_processes:
-          - YARN_NODEMANAGER
-          - HDFS_DATANODE
+          - NODEMANAGER
+          - DATANODE
         volumes_per_node: 2
         volumes_size: 2
-        auto_security_group: true
-      - name: manager
-        flavor_id: '3'
-        node_processes:
-          - CLOUDERA_MANAGER
         auto_security_group: true
       - name: master-core
         flavor_id: '3'
         node_processes:
-          - HDFS_NAMENODE
-          - YARN_RESOURCEMANAGER
+          - NAMENODE
+          - RESOURCEMANAGER
         auto_security_group: true
       - name: master-additional
         flavor_id: '3'
         node_processes:
           - OOZIE_SERVER
-          - YARN_JOBHISTORY
-          - HDFS_SECONDARYNAMENODE
-          - HIVE_METASTORE
-          - HIVE_SERVER2
+          - JOBHISTORY
+          - SECONDARYNAMENODE
+          - HIVEMETASTORE
+          - HIVESERVER2
         auto_security_group: true
     cluster_template:
       name: cdh-5-3-0
       node_group_templates:
-        manager: 1
         master-core: 1
         master-additional: 1
         worker-nm-dn: 1

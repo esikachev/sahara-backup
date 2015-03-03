@@ -1,7 +1,7 @@
 clusters:
   - plugin_name: vanilla
     plugin_version: 1.2.1
-    image: vanilla1
+    image: sahara
     node_group_templates:
       - name: worker-tt-dn
         flavor_id: '3'
@@ -53,7 +53,11 @@ clusters:
         general:
           'Enable Swift': True
     cluster:
+<<<<<<< HEAD
       name: scenario-vanilla-1.2.1
+=======
+      name: scenario-v1
+>>>>>>> 8936cb2... Add scenario files for new integration tests
     scaling:
       - operation: resize
         node_group: worker-tt-dn
@@ -70,4 +74,8 @@ clusters:
       - operation: add
         node_group: worker-dn
         size: 1
+<<<<<<< HEAD
     edp_jobs_flow: hadoop_1
+=======
+    edp_jobs_flow: hadoop_1
+>>>>>>> 8936cb2... Add scenario files for new integration tests

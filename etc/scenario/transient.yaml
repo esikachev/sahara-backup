@@ -1,6 +1,6 @@
 clusters:
   - plugin_name: vanilla
-    plugin_version: 2.6.0
+    plugin_version: 2.4.1
     image: vanilla2
     node_group_templates:
       - name: worker

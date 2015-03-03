@@ -39,7 +39,7 @@ clusters:
         YARN:
           yarn.log-aggregation-enable: false
     cluster:
-      name: scenario-hdp-2.0.6
+      name: scenario-hdp2
     scaling:
       - operation: add
         node_group: worker

@@ -1,7 +1,7 @@
 clusters:
   - plugin_name: vanilla
     plugin_version: 2.4.1
-    image: ubuntu_vanilla_2.4_latest
+    image: vanilla2
     node_group_templates:
       - name: worker-dn-nm
         flavor_id: '3'
@@ -65,7 +65,7 @@ clusters:
         HDFS:
           dfs.replication: 1
     cluster:
-      name: scenario-vanilla-2.6.0
+      name: scenario-v2
     scaling:
       - operation: resize
         node_group: worker-dn-nm
