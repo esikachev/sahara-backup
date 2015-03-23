@@ -371,8 +371,20 @@ class BaseTestCase(base.BaseTestCase):
             while True:
                 status = self.sahara.get_cluster_status(cluster_id)
                 if status == 'Active':
+                    test_info = {
+                        'check_name': "Check cluster state",
+                        'status': "Active",
+                        'traceback': None
+                    }
+                    self._results.append(test_info)
                     break
                 if status == 'Error':
+                    test_info = {
+                        'check_name': "Check cluster state",
+                        'status': "Error",
+                        'traceback': None
+                    }
+                    self._results.append(test_info)
                     raise exc.TempestException("Cluster in %s state" % status)
                 time.sleep(3)
 
