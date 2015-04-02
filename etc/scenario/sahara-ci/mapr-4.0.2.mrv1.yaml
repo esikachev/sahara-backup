@@ -1,32 +1,31 @@
 clusters:
   - plugin_name: mapr
-    plugin_version: 4.0.2.mrv2
-    image: es-mapr-centos
+    plugin_version: 4.0.2.mrv1
+    image: es-mapr
     node_group_templates:
       - name: master
-        flavor_id: "46af5360-896a-46a1-b887-a4dd73cc17fa"
+        flavor_id: "5b971094-eaf8-4dc3-9b00-efd777986828"
         node_processes:
           - Metrics
           - Webserver
           - ZooKeeper
           - HTTPFS
+          - TaskTracker
+          - JobTracker
           - Oozie
           - FileServer
           - CLDB
           - Flume
           - Hue
-          - NodeManager
-          - HistoryServer
-          - ResourceManager
           - HiveServer2
           - HiveMetastore
           - Sqoop2-Client
           - Sqoop2-Server
         auto_security_group: true
       - name: worker
-        flavor_id: "46af5360-896a-46a1-b887-a4dd73cc17fa"
+        flavor_id: "5b971094-eaf8-4dc3-9b00-efd777986828"
         node_processes:
-          - NodeManager
+          - TaskTracker
           - FileServer
         auto_security_group: true
     cluster_template:
@@ -35,7 +34,7 @@ clusters:
         master: 1
         worker: 3
     cluster:
-      name: mapr402mrv2
+      name: mapr402mrv1
     scaling:
       - operation: add
         node_group: worker

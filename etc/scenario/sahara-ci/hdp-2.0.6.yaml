@@ -1,23 +1,27 @@
 clusters:
   - plugin_name: hdp
     plugin_version: 2.0.6
-    image: %hdp_two_image%
+    image: hdp2
     node_group_templates:
       - name: master
-        flavor_id: %ci_flavor_id%
+        flavor_id: '3'
         node_processes:
           - AMBARI_SERVER
           - GANGLIA_SERVER
           - HISTORYSERVER
           - NAGIOS_SERVER
           - NAMENODE
-          - OOZIE_SERVER
           - RESOURCEMANAGER
           - SECONDARY_NAMENODE
           - ZOOKEEPER_SERVER
         auto_security_group: true
+      - name: master-oz
+        flavor_id: '3'
+        node_processes:
+          - OOZIE_SERVER
+        auto_security_group: true
       - name: worker
-        flavor_id: %ci_flavor_id%
+        flavor_id: '3'
         node_processes:
           - DATANODE
           - HDFS_CLIENT
@@ -31,17 +35,21 @@ clusters:
         volumes_size: 2
         auto_security_group: true
     cluster_template:
-      name: hdp206
+      name: hdp-2-0-6
       node_group_templates:
         master: 1
         worker: 3
+        master-oz: 1
       cluster_configs:
         YARN:
           yarn.log-aggregation-enable: false
+        HDFS:
+          datanode_du_reserved: 0
     cluster:
-      name: %cluster_name%
+      name: scenario-hdp2
     scaling:
       - operation: add
         node_group: worker
         size: 1
     edp_jobs_flow: hadoop_2
+    retain_resources: true

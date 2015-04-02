@@ -1,13 +1,18 @@
 clusters:
   - plugin_name: vanilla
-    plugin_version: 2.6.0
-    image: %vanilla_two_six_image%
+    plugin_version: 2.4.1
+    image: vanilla2
     node_group_templates:
-      - name: worker
-        flavor_id: %ci_flavor_id%
+      - name: transient
+        flavor_id: '3'
         node_processes:
           - datanode
           - nodemanager
+          - oozie
+          - historyserver
+          - secondarynamenode
+          - resourcemanager
+          - namenode
         volumes_per_node: 2
         volumes_size: 2
         auto_security_group: true
@@ -20,19 +25,10 @@ clusters:
             yarn.scheduler.minimum-allocation-mb: 256
             yarn.scheduler.maximum-allocation-mb: 1024
             yarn.nodemanager.vmem-check-enabled: false
-      - name: master
-        flavor_id: %ci_flavor_id%
-        node_processes:
-          - oozie
-          - historyserver
-          - resourcemanager
-          - namenode
-        auto_security_group: true
     cluster_template:
-      name: transient
+      name: vanilla2
       node_group_templates:
-        master: 1
-        worker: 3
+        transient: 1
       cluster_configs:
         HDFS:
           dfs.replication: 1
@@ -42,9 +38,6 @@ clusters:
         YARN:
           yarn.resourcemanager.scheduler.class: org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler
     cluster:
-      name: %cluster_name%
+      name: transient
       is_transient: true
-    scenario:
-      - run_jobs
-      - transient
     edp_jobs_flow: transient

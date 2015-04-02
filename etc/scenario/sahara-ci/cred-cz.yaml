@@ -1,0 +1,9 @@
+credentials:
+  os_username: dev-user
+  os_password: swordfish
+  os_tenant: devs
+  os_auth_url: http://172.18.168.5:5000/v2.0
+
+network:
+  private_network: dev-network
+  public_network: net04_ext
