@@ -1,7 +1,7 @@
 clusters:
   - plugin_name: fake
     plugin_version: "0.1"
-    image: es-vanilla1
+    image: spark1
     node_group_templates:
       - name: worker
         flavor_id: '3'

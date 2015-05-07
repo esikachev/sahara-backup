@@ -160,6 +160,8 @@ class BaseTestCase(base.BaseTestCase):
                 url = self._create_swift_data(location)
             if ds['type'] == 'hdfs' or ds['type'] == 'maprfs':
                 url = location
+            if ds['type'] == 'maprfs':
+                url = location
             return self.__create_datasource(
                 name=utils.rand_name(name),
                 description='',

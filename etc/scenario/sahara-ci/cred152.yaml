@@ -3,6 +3,7 @@ credentials:
   os_password: admin
   os_tenant: admin
   os_auth_url: http://172.18.79.152:5000/v2.0
+  sahara_service_type: data_processing
 
 network:
   private_network: net04
