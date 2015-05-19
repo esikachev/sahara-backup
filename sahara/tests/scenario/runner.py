@@ -52,7 +52,7 @@ def set_defaults(config):
                                                  False)
     net['public_network'] = net.get('public_network', 'public')
 
-    default_scenario = ['run_jobs', 'scale', 'run_jobs']
+    default_scenario = ['run_jobs', 'scale', 'run_jobs', 'event_logs']
 
     # set up tests parameters
     for testcase in config['clusters']:

@@ -356,8 +356,9 @@ class BaseTestCase(base.BaseTestCase):
 
         return self.__create_cluster_template(**kwargs)
 
-    def _check_event_log_feature(self, cluster_id):
-        cluster = self.sahara.get_cluster(cluster_id, show_progress=True)
+    @track_result("Check event logs")
+    def check_event_logs(self):
+        cluster = self.sahara.get_cluster(self.cluster_id, show_progress=True)
         invalid_steps = []
         if cluster.is_transient:
             # skip event log testing
@@ -409,7 +410,6 @@ class BaseTestCase(base.BaseTestCase):
                 if status == 'Error':
                     raise exc.TempestException("Cluster in %s state" % status)
                 time.sleep(3)
-        self._check_event_log_feature(cluster_id)
 
     # client ops
 
