@@ -4,7 +4,7 @@ clusters:
     image: spark1
     node_group_templates:
       - name: worker
-        flavor_id: '3'
+        flavor_id: '2'
         node_processes:
           - datanode
           - tasktracker
@@ -12,7 +12,7 @@ clusters:
         volumes_size: 2
         auto_security_group: true
       - name: master
-        flavor_id: '3'
+        flavor_id: '2'
         node_processes:
           - jobtracker
           - namenode

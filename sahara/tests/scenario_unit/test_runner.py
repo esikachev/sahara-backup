@@ -66,7 +66,8 @@ class RunnerUnitTest(testtools.TestCase):
                     "edp_jobs_flow": None,
                     "class_name": "vanilla2_6_0",
                     "plugin_name": "vanilla",
-                    "scenario": ['run_jobs', 'scale', 'run_jobs'],
+                    "scenario": ['run_jobs', 'scale', 'run_jobs',
+                                 'event_logs'],
                     "plugin_version": "2.6.0",
                     "retain_resources": False
                 }],
@@ -196,7 +197,8 @@ class RunnerUnitTest(testtools.TestCase):
                                 }]
                         }
                     ],
-                    "scenario": ['run_jobs', 'scale', 'run_jobs'],
+                    "scenario": ['run_jobs', 'scale', 'run_jobs',
+                                 'event_logs'],
                     "class_name": "vanilla2_6_0"
                 }],
         }

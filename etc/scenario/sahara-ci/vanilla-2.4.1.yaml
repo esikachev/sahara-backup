@@ -1,21 +1,32 @@
 clusters:
   - plugin_name: vanilla
-    plugin_version: 1.2.1
-    image: vanilla1
+    plugin_version: 2.4.1
+    image: vanilla2
     node_group_templates:
-      - name: worker-tt-dn
+      - name: worker-dn-nm
         flavor_id: '3'
         node_processes:
           - datanode
-          - tasktracker
+          - nodemanager
         volumes_per_node: 2
         volumes_size: 2
         auto_security_group: true
-      - name: worker-tt
+        node_configs:
+          &ng_configs
+          MapReduce:
+            yarn.app.mapreduce.am.resource.mb: 256
+            yarn.app.mapreduce.am.command-opts: -Xmx256m
+          YARN:
+            yarn.scheduler.minimum-allocation-mb: 256
+            yarn.scheduler.maximum-allocation-mb: 1024
+            yarn.nodemanager.vmem-check-enabled: false
+      - name: worker-nm
         flavor_id: '3'
         node_processes:
-          - tasktracker
+          - nodemanager
         auto_security_group: true
+        node_configs:
+          *ng_configs
       - name: worker-dn
         flavor_id: '3'
         node_processes:
@@ -23,51 +34,52 @@ clusters:
         volumes_per_node: 2
         volumes_size: 2
         auto_security_group: true
-      - name: master-jt-nn
+        node_configs:
+          *ng_configs
+      - name: master-rm-nn-hvs
         flavor_id: '3'
         node_processes:
           - namenode
-          - jobtracker
+          - resourcemanager
         auto_security_group: true
-      - name: master-sec-nn-oz
+        node_configs:
+          *ng_configs
+      - name: master-oo-hs-sn
         flavor_id: '3'
         node_processes:
           - oozie
+          - historyserver
           - secondarynamenode
         auto_security_group: true
-
+        node_configs:
+          *ng_configs
     cluster_template:
-      name: vanilla-1-2-1
+      name: vanilla-2-4
       node_group_templates:
-        master-sec-nn-oz: 1
-        master-jt-nn: 1
-        worker-tt: 1
-        worker-tt-dn: 2
+        master-rm-nn-hvs: 1
+        master-oo-hs-sn: 1
+        worker-dn-nm: 2
         worker-dn: 1
+        worker-nm: 1
       cluster_configs:
         HDFS:
           dfs.replication: 1
-        MapReduce:
-          mapred.map.tasks.speculative.execution: False
-          mapred.child.java.opts: -Xmx500m
-        general:
-          'Enable Swift': True
     cluster:
-      name: vanilla1
+      name: vanilla-2-4
     scaling:
       - operation: resize
-        node_group: worker-tt-dn
+        node_group: worker-dn-nm
         size: 1
       - operation: resize
         node_group: worker-dn
         size: 0
       - operation: resize
-        node_group: worker-tt
+        node_group: worker-nm
         size: 0
-      - operation: add
-        node_group: worker-tt
-        size: 1
       - operation: add
         node_group: worker-dn
         size: 1
-    edp_jobs_flow: hadoop_1
+      - operation: add
+        node_group: worker-nm
+        size: 1
+    edp_jobs_flow: hadoop_2

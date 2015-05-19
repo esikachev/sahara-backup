@@ -1,6 +1,6 @@
 clusters:
   - plugin_name: cdh
-    plugin_version: "5"
+    plugin_version: 5.3.0
     image: cdh5
     node_group_templates:
       - name: worker-dn

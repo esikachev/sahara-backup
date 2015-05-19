@@ -1,7 +1,7 @@
 clusters:
   - plugin_name: cdh
     plugin_version: "5"
-    image: cdh5-ce
+    image: cdh5
     node_group_templates:
       - name: worker-dn
         flavor_id: '3'

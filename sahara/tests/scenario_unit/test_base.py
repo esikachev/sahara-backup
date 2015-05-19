@@ -141,7 +141,6 @@ class TestBase(testtools.TestCase):
                                             'vanilla/2.6.0')
         self.job = self.base_scenario.testcase["edp_jobs_flow"].get(
             'test_flow')[0]
-        self.base_scenario.cluster_id = 'fake_id'
         self.base_scenario.setUpClass()
         timeouts.Defaults.init_defaults(self.base_scenario.testcase)
 
@@ -222,7 +221,7 @@ class TestBase(testtools.TestCase):
                 return_value='mock_net')
     @mock.patch('saharaclient.api.base.ResourceManager._get',
                 return_value=FakeResponse(set_status='Active'))
-    @mock.patch('sahara.tests.scenario.base.BaseTestCase.check_event_logs')
+    @mock.patch('sahara.tests.scenario.base.BaseTestCase._check_event_logs')
     def test__poll_cluster_status(self, mock_status, mock_neutron,
                                   mock_saharaclient, mock_check_event_logs):
         self.base_scenario._init_clients()
@@ -233,24 +232,19 @@ class TestBase(testtools.TestCase):
     @mock.patch('saharaclient.api.base.ResourceManager._get')
     def test_check_event_log_feature(self, mock_resp, mock_saharaclient):
         self.base_scenario._init_clients()
-        mock_resp.side_effect = [
-            FakeCluster(is_transient=True, provision_progress=[]),
-            FakeCluster(is_transient=False,
-                        provision_progress=[{'successful': True}]),
-            FakeCluster(is_transient=False,
-                        provision_progress=[{'successful': False}]),
-            FakeCluster(is_transient=False,
-                        provision_progress=[{'successful': None}])
-        ]
 
-        self.assertIsNone(self.base_scenario.check_event_logs())
-        self.assertIsNone(self.base_scenario.check_event_logs())
+        self.assertIsNone(self.base_scenario._check_event_logs(
+            FakeCluster(True, [])))
+        self.assertIsNone(self.base_scenario._check_event_logs(
+            FakeCluster(False, [{'successful': True}])))
 
         with testtools.ExpectedException(exc.TempestException):
-            self.base_scenario.check_event_logs()
+            self.base_scenario._check_event_logs(
+                FakeCluster(False, [{'successful': False}]))
 
         with testtools.ExpectedException(exc.TempestException):
-            self.base_scenario.check_event_logs()
+            self.base_scenario._check_event_logs(
+                FakeCluster(False, [{'successful': None}]))
 
     @mock.patch('saharaclient.api.base.ResourceManager._update',
                 return_value=FakeResponse(set_id='id_internal_db_data'))

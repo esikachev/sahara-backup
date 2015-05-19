@@ -359,12 +359,7 @@ class BaseTestCase(base.BaseTestCase):
         return self.__create_cluster_template(**kwargs)
 
     @track_result("Check event logs")
-    def check_event_logs(self):
-        cluster = self.sahara.get_cluster(self.cluster_id, show_progress=True)
-        if not hasattr(cluster, "provision_progress"):
-            return
-        if cluster.provision_progress is None:
-            return
+    def _check_event_logs(self, cluster):
         invalid_steps = []
         if cluster.is_transient:
             # skip event log testing
@@ -406,8 +401,7 @@ class BaseTestCase(base.BaseTestCase):
         self._poll_cluster_status(cluster_id)
 
     def _poll_cluster_status(self, cluster_id):
-        with fixtures.Timeout(
-                timeouts.Defaults.instance.timeout_poll_cluster_status,
+        with fixtures.Timeout(3000,
                 gentle=True):
             while True:
                 status = self.sahara.get_cluster_status(cluster_id)
@@ -415,7 +409,13 @@ class BaseTestCase(base.BaseTestCase):
                     break
                 if status == 'Error':
                     raise exc.TempestException("Cluster in %s state" % status)
-                time.sleep(3)
+                time.sleep(5)
+        cluster = self.sahara.get_cluster(cluster_id, show_progress=True)
+        if not hasattr(cluster, "provision_progress"):
+            return
+        if cluster.provision_progress is None:
+            return
+        self._check_event_logs(cluster)
 
     # client ops
 
