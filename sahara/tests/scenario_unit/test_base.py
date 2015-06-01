@@ -55,9 +55,10 @@ class FakeCluster(object):
 
 
 class FakeResponse(object):
-    def __init__(self, set_id=None, set_status=None):
+    def __init__(self, set_id=None, set_status=None, node_groups=None):
         self.id = set_id
         self.status = set_status
+        self.node_groups = node_groups
 
 
 class TestBase(testtools.TestCase):
@@ -142,6 +143,7 @@ class TestBase(testtools.TestCase):
                                             'vanilla/2.6.0')
         self.job = self.base_scenario.testcase["edp_jobs_flow"].get(
             'test_flow')[0]
+        self.base_scenario.cluster_id = 'some_id'
         self.base_scenario.setUpClass()
         timeouts.Defaults.init_defaults(self.base_scenario.testcase)
 
@@ -418,3 +420,12 @@ class TestBase(testtools.TestCase):
         self.base_scenario._init_clients()
         with testtools.ExpectedException(exc.TempestException):
             self.base_scenario._poll_cluster_status('id_cluster')
+
+    @mock.patch('saharaclient.api.clusters.ClusterManager.get',
+                return_value=FakeResponse(node_groups=[{
+                    'node_processes': 'foo',
+                    'instances': [{'management_ip': 'foo_ip'}]
+                }]))
+    def test_get_node_with_process(self, mock_getcluster):
+        self.base_scenario._init_clients()
+        self.base_scenario._get_node_with_process('test')

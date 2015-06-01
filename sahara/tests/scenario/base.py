@@ -422,6 +422,14 @@ class BaseTestCase(base.BaseTestCase):
                                         pkey=self.private_key)
         return ssh_session.exec_command(command)
 
+    def _get_node_with_process(self, process):
+        nodegroups = self.sahara.get_cluster(self.cluster_id).node_groups
+        nodes_with_process = []
+        for nodegroup in nodegroups:
+            if process in nodegroup['node_processes']:
+                nodes_with_process.append(nodegroup['instances'][0])
+        return nodes_with_process
+
     # client ops
 
     def __create_node_group_template(self, *args, **kwargs):
