@@ -65,4 +65,5 @@ clusters:
       name: %cluster_name%
     scenario:
       - run_jobs
+      - sqoop2
     edp_jobs_flow: hadoop_2
